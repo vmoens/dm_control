@@ -208,7 +208,11 @@ class Physics(_control.Physics):
     Returns:
       The rendered RGB, depth or segmentation image.
     """
-    camera = Camera(
+    if not hasattr(self, 'cameras'):
+        self.cameras = dict()
+    camera = self.cameras.get(camera_id, None)
+    if camera is None:
+        self.cameras[camera_id] = camera = Camera(
         physics=self, height=height, width=width, camera_id=camera_id)
     image = camera.render(
         overlays=overlays, depth=depth, segmentation=segmentation,
@@ -827,6 +831,9 @@ class Camera:
         when `depth` or `segmentation` rendering is enabled.
       ValueError: If both depth and segmentation flags are set together.
     """
+    # Internal buffers.
+    self._rgb_buffer = np.empty((self._height, self._width, 3), dtype=np.uint8)
+    self._depth_buffer = np.empty((self._height, self._width), dtype=np.float32)
 
     if overlays and (depth or segmentation):
       raise ValueError(_OVERLAYS_NOT_SUPPORTED_FOR_DEPTH_OR_SEGMENTATION)
