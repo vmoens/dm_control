@@ -14,7 +14,7 @@ Pillow==9.1.1
 protobuf==3.20.1
 pyopengl==3.1.6
 pyparsing==2.4.7
-requests==2.27.1
+requests==2.31.0
 scipy==1.7.3
 setuptools==62.3.2
 tqdm==4.64.0
